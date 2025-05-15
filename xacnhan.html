@@ -44,6 +44,8 @@
   <div id="name-list"></div>
 
   <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk1DUFaqUahMVmRx0AAnYeT4avsy_puB0AOHWZ7HMQhpQqTX2hY35urTbLbB1ijZ3fKA/exec"; // 👈 THAY URL NÀY
+
     const names = [
       "Thotchochit", "Tieutetu", "SamSoul", "SamSoul", "anthitnguoi", "Leon215", "LucTuyetThan", "QuyKiem", "IVIipu",
       "lily17", "HanNgocY", "Kingwin", "ZzMiuzZ", "iLovely", "TietDinhSan", "DocRaTuDit", "NoneStop", "HanBaoDao",
@@ -68,10 +70,25 @@
 
       const btn = document.createElement("button");
       btn.textContent = "Tôi là người này";
+
       btn.onclick = () => {
-        btn.textContent = "Đã xác nhận";
+        btn.textContent = "Đang gửi...";
         btn.disabled = true;
-        console.log("Đã xác nhận:", name); // Có thể thay bằng gửi về server sau
+
+        fetch(SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: name })
+        })
+        .then(res => res.text())
+        .then(response => {
+          btn.textContent = "Đã xác nhận";
+        })
+        .catch(err => {
+          alert("Lỗi khi xác nhận. Vui lòng thử lại!");
+          btn.textContent = "Tôi là người này";
+          btn.disabled = false;
+        });
       };
 
       div.appendChild(span);
